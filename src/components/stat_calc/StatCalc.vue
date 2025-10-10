@@ -69,7 +69,7 @@ function calcSourceData(data){
     defBossCriticalDamage:0,    //有效爆功
     skillDamage:0,
     showDamage:0,
-    maxDamage:0
+    maxDamage:0,
   }
   if (!jobs.hasOwnProperty(data.job)){
     return result
