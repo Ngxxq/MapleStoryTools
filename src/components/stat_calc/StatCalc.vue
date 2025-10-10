@@ -67,10 +67,9 @@ function calcSourceData(data){
     remainingDef:0, //有效傷害比
     defBDamage:0,   //有效b功
     defBossCriticalDamage:0,    //有效爆功
-    testval:999,
-    //skillDamage:0,
-    //showDamage:0,
-    //maxDamage:0,
+    skillDamage:0,
+    showDamage:0,
+    maxDamage:0,
   }
   if (!jobs.hasOwnProperty(data.job)){
     return result
@@ -130,14 +129,14 @@ function calcSourceData(data){
   result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
 
   // 计算技能伤害
-  //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)*level_value*arc_value*aut_value*(skill_value/100+skill_fd/100)
+  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage.value/100)*(1+data.pmdR/100)*level_value.value*arc_value.value*aut_value.value*(skill_value.value/100+skill_fd.value/100)
   //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
   // 计算最终技能伤害
-  //result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
+  result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
 
   // 计算最大单段伤害
-  //result.maxDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.5+data.cdR/100)
+  result.maxDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.5+data.cdR/100)
 
   return result
 }
@@ -447,6 +446,7 @@ const skill_damage = ref(0)
 const arc_value = ref(1)
 const aut_value = ref(1)
 const level_value = ref(1.2)
+
 const currentStatCalcResult = computed(()=>{
   saveStore()
   return calcSourceData(currentStat.value.data)
@@ -1472,15 +1472,15 @@ const statImdR = computed(()=>{
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         伤害系数：{{level_value}}
                       </template>
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
-                  </n-gi>
-                  <!-- <n-gi :span="gis">
+                  </n-gi> -->
+                  <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
@@ -1495,7 +1495,7 @@ const statImdR = computed(()=>{
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
-                  </n-gi> -->
+                  </n-gi>
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="属性换算" name="5">
