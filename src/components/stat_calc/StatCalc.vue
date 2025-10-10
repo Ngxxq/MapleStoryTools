@@ -67,6 +67,7 @@ function calcSourceData(data){
     remainingDef:0, //有效傷害比
     defBDamage:0,   //有效b功
     defBossCriticalDamage:0,    //有效爆功
+    testval:999,
     //skillDamage:0,
     //showDamage:0,
     //maxDamage:0,
@@ -1418,23 +1419,6 @@ const statImdR = computed(()=>{
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  
-                  <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        税后伤害系数：{{numberFormat(currentStatCalcResult.defBDamage)}}
-                      </template>
-                      <span>無視：{{currentStatCalcResult.imdr.toFixed(2)}}%，剩餘防禦：{{(100 - currentStatCalcResult.remainingDef * 100).toFixed(2)}}%<br />BOSS怪物 × (100% - 剩餘防禦%)</span>
-                    </n-popover>
-                  </n-gi>
-                  <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        伤害系数：{{numberFormat(currentStatCalcResult.defBossCriticalDamage)}}
-                      </template>
-                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
-                    </n-popover>
-                  </n-gi>
                   <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
@@ -1467,6 +1451,14 @@ const statImdR = computed(()=>{
                     <n-popover trigger="hover">
                       <template #trigger>
                         伤害系数：{{numberFormat(currentStatCalcResult.defBossCriticalDamage)}}
+                      </template>
+                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
+                    </n-popover>
+                  </n-gi>
+                  <n-gi :span="gis">
+                    <n-popover trigger="hover">
+                      <template #trigger>
+                        伤害系数：{{numberFormat(currentStatCalcResult.testval)}}
                       </template>
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
