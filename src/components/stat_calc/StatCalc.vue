@@ -1293,7 +1293,7 @@ const statImdR = computed(()=>{
         <n-tab-pane name="result" tab="计算结果">
           <n-form>
             <n-collapse v-model:expanded-names="resultPanelCollapseExpanded">
-              <n-collapse-item title="素質" name="1">
+              <n-collapse-item title="机体" name="1">
                 <n-grid item-responsive responsive="screen" x-gap="12">
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
@@ -1335,13 +1335,18 @@ const statImdR = computed(()=>{
                       <span>計算BUFF後的無視防禦率%</span>
                     </n-popover>
                   </n-gi>
-                  <n-form-item-gi label-placement="left" label="目標防禦%" :span="gis">
+                </n-grid>
+              </n-collapse-item>
+              <n-collapse-item title="BOSS、技能设定" name="2">
+                <n-grid item-responsive responsive="screen" x-gap="12">
+                  <n-form-item-gi label-placement="left" label="BOSS防御%" :span="gis">
                     <n-input-number min="0" v-model:value="def">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
+                  
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
@@ -1360,7 +1365,7 @@ const statImdR = computed(()=>{
                   </n-gi>
                 </n-grid>
               </n-collapse-item>
-              <n-collapse-item title="等效換算" name="2">
+              <n-collapse-item title="等效换算" name="3">
                 <n-space vertical>
                   <n-alert :show-icon="false">
                     填寫等效源的數值和類型後，可以看到對應數值的等效源等於多少其他屬性。<br>
@@ -1433,7 +1438,7 @@ const statImdR = computed(()=>{
                   </n-grid>
                 </n-space>
               </n-collapse-item>
-              <n-collapse-item title="極限屬性" name="3">
+              <n-collapse-item title="极限属性" name="4">
                 <n-space vertical>
                   <n-alert :show-icon="false">
                     計算極限屬性時建議先將暴擊率點到100%。<br>
@@ -1464,7 +1469,7 @@ const statImdR = computed(()=>{
                   <n-log :log="hyperStateLogs"/>
                 </n-space>
               </n-collapse-item>
-              <n-collapse-item title="HEXA屬性" name="4">
+              <n-collapse-item title="HEXA属性" name="5">
                 <n-space vertical>
                   <n-alert>
                     <n-popover trigger="hover">
