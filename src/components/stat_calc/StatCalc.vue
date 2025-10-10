@@ -1449,14 +1449,14 @@ const statImdR = computed(()=>{
               </n-collapse-item>
               <n-collapse-item title="输出计算" name="4">
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <!-- <n-gi :span="gis">
+                  <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         税后伤害系数：{{numberFormat(currentStatCalcResult.defBDamage)}}
                       </template>
                       <span>無視：{{currentStatCalcResult.imdr.toFixed(2)}}%，剩餘防禦：{{(100 - currentStatCalcResult.remainingDef * 100).toFixed(2)}}%<br />BOSS怪物 × (100% - 剩餘防禦%)</span>
                     </n-popover>
-                  </n-gi> -->
+                  </n-gi>
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
