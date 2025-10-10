@@ -441,6 +441,12 @@ function saveStore(){
 }
 //計算素質
 const def = ref(300)
+const skill_value = ref(100)
+const skill_fd = ref(0)
+const skill_damage = ref(0)
+const arc_value = ref(1)
+const aut_value = ref(1)
+const level_value = ref(1.2)
 const currentStatCalcResult = computed(()=>{
   saveStore()
   return calcSourceData(currentStat.value.data)
@@ -1466,7 +1472,7 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        伤害系数：{{numberFormat(level_value)}}
+                        伤害系数：{{numberFormat(level_value.value)}}
                       </template>
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
