@@ -129,7 +129,7 @@ function calcSourceData(data){
   result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
 
   // 计算技能伤害
-  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage.value/100)*(1+data.pmdR/100)
+  result.skillDamage = result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
                                      * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100)
   //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
@@ -1500,6 +1500,15 @@ const statImdR = computed(()=>{
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
+                  </n-gi>
+                  <n-gi :span="gis">
+                    <div>调试信息:</div>
+                    <div>等级压制: {{ level_value }}</div>
+                    <div>神秘力量: {{ arc_value }}</div>
+                    <div>真实之力: {{ aut_value }}</div>
+                    <div>技能系数: {{ skill_value }}</div>
+                    <div>技能系数: {{ skill_damage }}</div>
+                    <div>技能系数: {{ skill_fd }}</div>
                   </n-gi>
                 </n-grid>
               </n-collapse-item>
