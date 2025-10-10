@@ -123,14 +123,14 @@ function calcSourceData(data){
   result.remainingDef = 1 - ( 1 - result.imdr/100) * def.value/100
 
   //計算防後B功
-  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0) * (1+ier.value)/2
+  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0) * (1+ier.value/100)/2
 
   //計算防後暴B功
-  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100)) * (1+ier.value)/2
+  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100)) * (1+ier.value/100)/2
 
   // 计算技能伤害
   result.skillDamage = result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
-                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100) * (1+ier.value)/2
+                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100) * (1+ier.value/100)/2
 
   // 计算最终技能伤害
   result.showDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.35+data.cdR /100)
@@ -1528,55 +1528,43 @@ const statImdR = computed(()=>{
                         </n-input-group>
                       </n-form-item-gi>
                     </template>
-                    <n-space vertical>
-                      <n-gi :span="gis">
-                        <n-popover trigger="hover">
-                          <template #trigger>面板：{{Math.floor(sourceStatCalcResult.dDamage)}}</template>
-                          <span>提升所有等效屬性後增加的表攻</span>
-                        </n-popover>
-                      </n-gi>
-                      <n-gi :span="gis">
-                        <n-popover trigger="hover">
-                          <template #trigger>提升%：{{sourceStatCalcResult.diffR}}%</template>
-                          <span>提升所有等效屬性後增加的防後爆B攻相對於未提升時的%數</span>
-                        </n-popover>
-                      </n-gi>
-                      <n-gi :span="gis">
-                        <n-popover trigger="hover">
-                          <template #trigger>伤害系数：{{Math.floor(sourceStatCalcResult.diff)}}</template>
-                          <span>提升所有等效屬性後增加的防後爆B攻</span>
-                        </n-popover>
-                      </n-gi>
-                      <n-gi :span="gis">
-                        <n-popover trigger="hover">
-                          <template #trigger>技能单段最大伤害：{{Math.floor(sourceStatCalcResult.max_diff)}}</template>
-                          <span>提升所有等效屬性後增加的单段技能伤害</span>
-                        </n-popover>
-                      </n-gi>
-                    </n-space>
-
+                    <n-gi :span="gis">
+                      <n-popover trigger="hover">
+                        <template #trigger>面板：{{Math.floor(sourceStatCalcResult.dDamage)}}</template>
+                        <span>提升所有等效屬性後增加的表攻</span>
+                      </n-popover>
+                    </n-gi>
+                    <n-gi :span="gis">
+                      <n-popover trigger="hover">
+                        <template #trigger>提升%：{{sourceStatCalcResult.diffR}}%</template>
+                        <span>提升所有等效屬性後增加的防後爆B攻相對於未提升時的%數</span>
+                      </n-popover>
+                    </n-gi>
+                    <n-gi :span="gis">
+                      <n-popover trigger="hover">
+                        <template #trigger>伤害系数：{{Math.floor(sourceStatCalcResult.diff)}}</template>
+                        <span>提升所有等效屬性後增加的防後爆B攻</span>
+                      </n-popover>
+                    </n-gi>
+                    <n-gi :span="gis">
+                      <n-popover trigger="hover">
+                        <template #trigger>技能单段最大伤害：{{Math.floor(sourceStatCalcResult.max_diff)}}</template>
+                        <span>提升所有等效屬性後增加的单段技能伤害</span>
+                      </n-popover>
+                    </n-gi>
                     <n-gi :span="gis">{{props.atR}}：{{sourceStatCalcResult.atR}}%</n-gi>
                     <template  v-for="s in showStats">
                       <n-gi :span="gis">{{props[s]}}：{{sourceStatCalcResult[s]}}</n-gi>
                       <n-gi :span="gis">{{props[s+'R']}}：{{sourceStatCalcResult[s+'R']}}%</n-gi>
                       <n-gi :span="gis">{{props[s+'D']}}：{{sourceStatCalcResult[s+'D']}}</n-gi>
                     </template>
-                    <br>
                     <n-gi :span="gis">{{props.pmadR}}：{{sourceStatCalcResult.pmadR}}%</n-gi>
                     <n-gi :span="gis">{{props.pmad}}：{{sourceStatCalcResult.pmad}}</n-gi>
                     <n-gi :span="gis">{{props.pmadD}}：{{sourceStatCalcResult.pmadD}}</n-gi>
-                    </br>
-                    <div>
                     <n-gi :span="gis">{{props.damR}}/{{props.bdR}}：{{sourceStatCalcResult.damR}}%</n-gi>
                     <n-gi :span="gis">{{props.imdR}}：{{sourceStatCalcResult.imdR}}%</n-gi>
                     <n-gi :span="gis">{{props.cdR}}：{{sourceStatCalcResult.cdR}}%</n-gi>
                     <n-gi :span="gis">{{props.pmdR}}：{{sourceStatCalcResult.pmdR}}%</n-gi>
-                    </div>
-                    
-                    
-                    
-                    
-                    
                   </n-grid>
                 </n-space>
               </n-collapse-item>
