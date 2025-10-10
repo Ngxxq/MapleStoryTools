@@ -131,13 +131,12 @@ function calcSourceData(data){
   // 计算技能伤害
   result.skillDamage = result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
                                      * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100)
-  //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
   // 计算最终技能伤害
-  result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
+  result.showDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.35+data.cdR /100)
 
   // 计算最大单段伤害
-  result.maxDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.5+data.cdR/100)
+  result.maxDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.5+data.cdR/100)
 
   return result
 }
@@ -481,10 +480,10 @@ function calcSourceAddonData(addons){
   result['diff'] = diff
   if (afterResult.defBDamage===0) return result
   //添加最大技能伤害
-  // const max_diff = afterResult.maxDamage - beforeResult.maxDamage
-  // result['max_diff'] = max_diff
+  const max_diff = afterResult.maxDamage - beforeResult.maxDamage
+  result['max_diff'] = max_diff
 
-  // if (afterResult.maxDamage===0) return result
+  if (afterResult.maxDamage===0) return result
   
 
   //計算提升%
@@ -1433,22 +1432,6 @@ const statImdR = computed(()=>{
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <!-- <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
-                      </template>
-                      <span>技能单段平均伤害</span>
-                    </n-popover>
-                  </n-gi>
-                  <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        单段最大伤害：{{numberFormat(currentStatCalcResult.maxDamage)}}
-                      </template>
-                      <span>技能单段平均伤害</span>
-                    </n-popover>
-                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="输出计算" name="4">
@@ -1469,22 +1452,6 @@ const statImdR = computed(()=>{
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        伤害系数：{{numberFormat(currentStatCalcResult.testval*level_value)}}
-                      </template>
-                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
-                    </n-popover>
-                  </n-gi>
-                  <!-- <n-gi :span="gis">
-                    <n-popover trigger="hover">
-                      <template #trigger>
-                        伤害系数：{{level_value}}
-                      </template>
-                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
-                    </n-popover>
-                  </n-gi> -->
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
