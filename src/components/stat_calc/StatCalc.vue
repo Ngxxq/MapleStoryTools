@@ -1366,7 +1366,7 @@ const statImdR = computed(()=>{
                       <span>計算BUFF後的無視防禦率%</span>
                     </n-popover>
                   </n-gi>
-                  <n-form-item-gi label-placement="left" label="无视属性抗性%" :span="gis">
+                  <n-form-item-gi label="无视属性抗性%" :span="gis">
                     <n-input-number min="0" max="5" v-model:value="ier">
                       <template #suffix>
                         %
@@ -1380,14 +1380,14 @@ const statImdR = computed(()=>{
                   <n-alert :show-icon="false">
                     神秘/真实压制只能选一
                   </n-alert>
-                  <n-form-item-gi label-placement="left" label="BOSS防御%" :span="gis">
+                  <n-form-item-gi label="BOSS防御%" :span="gis">
                     <n-input-number min="0" v-model:value="def">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label-placement="left" label="等级压制" :span="gis">
+                  <n-form-item-gi label="等级压制" :span="gis">
                     <n-select
                       v-model:value="level_value"
                       :options="[
@@ -1400,7 +1400,7 @@ const statImdR = computed(()=>{
                       ]"
                     />
                   </n-form-item-gi>
-                  <n-form-item-gi label-placement="left" label="神秘力量压制" :span="gis">
+                  <n-form-item-gi label="神秘力量压制" :span="gis">
                     <n-select
                       v-model:value="arc_value"
                       :options="[
@@ -1409,7 +1409,7 @@ const statImdR = computed(()=>{
                       ]"
                     />
                   </n-form-item-gi>
-                  <n-form-item-gi label-placement="left" label="真实力量压制" :span="gis">
+                  <n-form-item-gi label="真实力量压制" :span="gis">
                     <n-select
                       v-model:value="aut_value"
                       :options="[
@@ -1422,21 +1422,21 @@ const statImdR = computed(()=>{
               </n-collapse-item>
               <n-collapse-item title="技能设定" name="3">
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <n-form-item-gi label-placement="left" label="技能系数%" :span="gis">
+                  <n-form-item-gi label="技能系数%" :span="gis">
                     <n-input-number min="0" v-model:value="skill_value">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label-placement="left" label="技能伤害%增加" :span="gis">
+                  <n-form-item-gi label="技能伤害%增加" :span="gis">
                     <n-input-number min="0" v-model:value="skill_damage">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label-placement="left" label="技能伤害p%增加" :span="gis">
+                  <n-form-item-gi label="技能伤害p%增加" :span="gis">
                     <n-input-number min="0" v-model:value="skill_fd">
                       <template #suffix>
                         %
