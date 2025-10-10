@@ -1323,7 +1323,8 @@ const statImdR = computed(()=>{
             <n-collapse v-model:expanded-names="resultPanelCollapseExpanded">
               <n-collapse-item title="机体" name="1">
                 <n-alert :show-icon="false">
-                  关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度
+                  关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度更适合黎明的BUFF计算器，涵盖黎明所有常用BUFF，其余BUFF请自行添加<br>
+                  计算实际伤害时需填写面板上的无视属性抗性<br></br>
                 </n-alert>
                 <n-grid item-responsive responsive="screen" x-gap="12">
                   <n-gi :span="gis">
@@ -1366,7 +1367,7 @@ const statImdR = computed(()=>{
                       <span>計算BUFF後的無視防禦率%</span>
                     </n-popover>
                   </n-gi>
-                  <n-form-item-gi label="无视属性抗性%" :span="gis">
+                  <n-form-item-gi label-placement="left" label="无视属性抗性%" :span="gis">
                     <n-input-number min="0" max="5" v-model:value="ier">
                       <template #suffix>
                         %
@@ -1376,10 +1377,11 @@ const statImdR = computed(()=>{
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="BOSS设定" name="2">
+                <n-alert :show-icon="false">
+                  赛前BOSS防御为300，之后为380,所有极限BOSS防御为380<br>
+                  神秘/真实压制只能选一<br></br>
+                </n-alert>
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <n-alert :show-icon="false">
-                    神秘/真实压制只能选一
-                  </n-alert>
                   <n-form-item-gi label="BOSS防御%" :span="gis">
                     <n-input-number min="0" v-model:value="def">
                       <template #suffix>
