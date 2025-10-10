@@ -67,9 +67,9 @@ function calcSourceData(data){
     remainingDef:0, //有效傷害比
     defBDamage:0,   //有效b功
     defBossCriticalDamage:0,    //有效爆功
-    skillDamage:0,
-    showDamage:0,
-    maxDamage:0,
+    //skillDamage:0,
+    //showDamage:0,
+    //maxDamage:0,
   }
   if (!jobs.hasOwnProperty(data.job)){
     return result
@@ -130,13 +130,13 @@ function calcSourceData(data){
 
   // 计算技能伤害
   //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)*level_value*arc_value*aut_value*(skill_value/100+skill_fd/100)
-  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
+  //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
   // 计算最终技能伤害
-  result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
+  //result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
 
   // 计算最大单段伤害
-  result.maxDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.5+data.cdR/100)
+  //result.maxDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.5+data.cdR/100)
 
   return result
 }
@@ -473,10 +473,10 @@ function calcSourceAddonData(addons){
   result['diff'] = diff
   if (afterResult.defBDamage===0) return result
   //添加最大技能伤害
-  const max_diff = afterResult.maxDamage - beforeResult.maxDamage
-  result['max_diff'] = max_diff
+  // const max_diff = afterResult.maxDamage - beforeResult.maxDamage
+  // result['max_diff'] = max_diff
 
-  if (afterResult.maxDamage===0) return result
+  // if (afterResult.maxDamage===0) return result
   
 
   //計算提升%
@@ -1359,14 +1359,14 @@ const statImdR = computed(()=>{
               </n-collapse-item>
               <n-collapse-item title="BOSS设定" name="2">
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <n-form-item-gi label="BOSS防御%" :span="gis">
+                  <n-form-item-gi label-placement="left" label="BOSS防御%" :span="gis">
                     <n-input-number min="0" v-model:value="def">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label="等级压制" :span="gis">
+                  <n-form-item-gi label-placement="left" label="等级压制" :span="gis">
                     <n-select
                       v-model:value="level_value"
                       :options="[
@@ -1397,21 +1397,21 @@ const statImdR = computed(()=>{
               </n-collapse-item>
               <n-collapse-item title="技能设定" name="3">
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <n-form-item-gi label="技能系数%" :span="gis">
+                  <n-form-item-gi label-placement="left" label="技能系数%" :span="gis">
                     <n-input-number min="0" v-model:value="skill_value">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label="技能伤害%增加" :span="gis">
+                  <n-form-item-gi label-placement="left" label="技能伤害%增加" :span="gis">
                     <n-input-number min="0" v-model:value="skill_damage">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label="技能伤害p%增加" :span="gis">
+                  <n-form-item-gi label-placement="left" label="技能伤害p%增加" :span="gis">
                     <n-input-number min="0" v-model:value="skill_fd">
                       <template #suffix>
                         %
@@ -1435,7 +1435,7 @@ const statImdR = computed(()=>{
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
@@ -1450,7 +1450,7 @@ const statImdR = computed(()=>{
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
-                  </n-gi>
+                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="输出计算" name="4">
@@ -1471,7 +1471,7 @@ const statImdR = computed(()=>{
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
@@ -1486,7 +1486,7 @@ const statImdR = computed(()=>{
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
-                  </n-gi>
+                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="属性换算" name="5">
