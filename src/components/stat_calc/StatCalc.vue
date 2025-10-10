@@ -88,9 +88,9 @@ function calcSourceData(data){
       result.st = Math.floor(chp / 3.5) + 0.8 * Math.floor((data.hp * (1+data['hpR']/100) + data.hpD - chp) / 3.5) + data.str * (1+data['strR']/100) + data.strD
       break
     case "3612":
-      result.st = Math.floor((data.str * (1+data['strR']/100) + data.strD + 
-                              data.luk * (1+data['lukR']/100) + data.lukD + 
-                              data.dex * (1+data['dexR']/100) + data.dexD)* 4) 
+      result.st = (Math.floor(data.str * (1+data['strR']/100)) + data.strD + 
+                   Math.floor(data.luk * (1+data['lukR']/100)) + data.lukD + 
+                   Math.floor(data.dex * (1+data['dexR']/100)) + data.dexD)* 4
       break
     default:
       for (const s of jobs[data.job].ps){
