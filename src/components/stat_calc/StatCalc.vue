@@ -1346,6 +1346,60 @@ const statImdR = computed(()=>{
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="等级压制" :span="gis">
+                    <n-select
+                      v-model:value="level_value"
+                      :options="[
+                        { label: '0', value: 10 },
+                        { label: '+1', value: 12 },
+                        { label: '+2', value: 14 },
+                        { label: '+3', value: 16 },
+                        { label: '+4', value: 18 },
+                        { label: '≥5', value: 20 }
+                      ]"
+                      default-value="20"
+                    />
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="神秘力量压制" :span="gis">
+                    <n-select
+                      v-model:value="arc_value"
+                      :options="[
+                        { label: '100%~109%', value: 1 },
+                        { label: '110%~129%', value: 1.1 },
+                        { label: '130%~149%', value: 1.3 },
+                        { label: '150%', value: 1.5 }
+                      ]"
+                      default-value="1.1"
+                    />
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="真实之力压制" :span="gis">
+                    <n-checkbox
+                      v-model:checked="aut_value_checked"
+                      label="真实之力压制"
+                      @update:checked="value => aut_value = value ? 1.25 : 0"
+                    />
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="技能系数%" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_value">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="技能伤害%增加" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_damage">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="技能伤害p%增加" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_fd">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
                   
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
