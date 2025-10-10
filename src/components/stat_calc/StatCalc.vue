@@ -123,14 +123,14 @@ function calcSourceData(data){
   result.remainingDef = 1 - ( 1 - result.imdr/100) * def.value/100
 
   //計算防後B功
-  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0)
+  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0) * (1+ier.value)/2
 
   //計算防後暴B功
-  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
+  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100)) * (1+ier.value)/2
 
   // 计算技能伤害
   result.skillDamage = result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
-                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100)
+                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100) * (1+ier.value)/2
 
   // 计算最终技能伤害
   result.showDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.35+data.cdR /100)
@@ -446,6 +446,7 @@ const skill_damage = ref(0)
 const arc_value = ref(1)
 const aut_value = ref(1)
 const level_value = ref(1.2)
+const ier = ref(0)
 
 const currentStatCalcResult = computed(()=>{
   saveStore()
@@ -1319,11 +1320,11 @@ const statImdR = computed(()=>{
         </n-tab-pane>
         <n-tab-pane name="result" tab="计算结果">
           <n-form>
-            <n-alert :show-icon="false">
-              关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度
-            </n-alert>
             <n-collapse v-model:expanded-names="resultPanelCollapseExpanded">
               <n-collapse-item title="机体" name="1">
+                <n-alert :show-icon="false">
+                  关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度
+                </n-alert>
                 <n-grid item-responsive responsive="screen" x-gap="12">
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
@@ -1365,10 +1366,20 @@ const statImdR = computed(()=>{
                       <span>計算BUFF後的無視防禦率%</span>
                     </n-popover>
                   </n-gi>
+                  <n-form-item-gi label-placement="left" label="无视属性抗性%" :span="gis">
+                    <n-input-number min="0" max="5" v-model:value="ier">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="BOSS设定" name="2">
                 <n-grid item-responsive responsive="screen" x-gap="12">
+                  <n-alert :show-icon="false">
+                    神秘/真实压制只能选一
+                  </n-alert>
                   <n-form-item-gi label-placement="left" label="BOSS防御%" :span="gis">
                     <n-input-number min="0" v-model:value="def">
                       <template #suffix>
@@ -1436,26 +1447,26 @@ const statImdR = computed(()=>{
               </n-collapse-item>
               <n-collapse-item title="输出计算" name="4">
                 <n-grid item-responsive responsive="screen" x-gap="12">
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         税后伤害系数：{{numberFormat(currentStatCalcResult.defBDamage)}}
                       </template>
                       <span>無視：{{currentStatCalcResult.imdr.toFixed(2)}}%，剩餘防禦：{{(100 - currentStatCalcResult.remainingDef * 100).toFixed(2)}}%<br />BOSS怪物 × (100% - 剩餘防禦%)</span>
                     </n-popover>
-                  </n-gi>
+                  </n-gi> -->
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         伤害系数：{{numberFormat(currentStatCalcResult.defBossCriticalDamage)}}
                       </template>
-                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
+                      <span> </span>
                     </n-popover>
                   </n-gi>
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
+                        技能单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
@@ -1463,12 +1474,12 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        单段最大伤害：{{numberFormat(currentStatCalcResult.maxDamage)}}
+                        技能单段最大伤害：{{numberFormat(currentStatCalcResult.maxDamage)}}
                       </template>
-                      <span>技能单段平均伤害</span>
+                      <span>技能单段最大伤害</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <div>调试信息:</div>
                     <div>等级压制: {{ level_value }}</div>
                     <div>神秘力量: {{ arc_value }}</div>
@@ -1476,7 +1487,7 @@ const statImdR = computed(()=>{
                     <div>技能系数: {{ skill_value }}</div>
                     <div>技能系数: {{ skill_damage }}</div>
                     <div>技能系数: {{ skill_fd }}</div>
-                  </n-gi>
+                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="属性换算" name="5">
@@ -1517,44 +1528,55 @@ const statImdR = computed(()=>{
                         </n-input-group>
                       </n-form-item-gi>
                     </template>
+                    <n-space vertical>
+                      <n-gi :span="gis">
+                        <n-popover trigger="hover">
+                          <template #trigger>面板：{{Math.floor(sourceStatCalcResult.dDamage)}}</template>
+                          <span>提升所有等效屬性後增加的表攻</span>
+                        </n-popover>
+                      </n-gi>
+                      <n-gi :span="gis">
+                        <n-popover trigger="hover">
+                          <template #trigger>提升%：{{sourceStatCalcResult.diffR}}%</template>
+                          <span>提升所有等效屬性後增加的防後爆B攻相對於未提升時的%數</span>
+                        </n-popover>
+                      </n-gi>
+                      <n-gi :span="gis">
+                        <n-popover trigger="hover">
+                          <template #trigger>伤害系数：{{Math.floor(sourceStatCalcResult.diff)}}</template>
+                          <span>提升所有等效屬性後增加的防後爆B攻</span>
+                        </n-popover>
+                      </n-gi>
+                      <n-gi :span="gis">
+                        <n-popover trigger="hover">
+                          <template #trigger>技能单段最大伤害：{{Math.floor(sourceStatCalcResult.max_diff)}}</template>
+                          <span>提升所有等效屬性後增加的单段技能伤害</span>
+                        </n-popover>
+                      </n-gi>
+                    </n-space>
 
-                    <n-gi :span="gis">
-                      <n-popover trigger="hover">
-                        <template #trigger>伤害系数：{{Math.floor(sourceStatCalcResult.diff)}}</template>
-                        <span>提升所有等效屬性後增加的防後爆B攻</span>
-                      </n-popover>
-                    </n-gi>
-                    <n-gi :span="gis">
-                      <n-popover trigger="hover">
-                        <template #trigger>单段伤害：{{Math.floor(sourceStatCalcResult.max_diff)}}</template>
-                        <span>提升所有等效屬性後增加的单段技能伤害</span>
-                      </n-popover>
-                    </n-gi>
-                    <n-gi :span="gis">
-                      <n-popover trigger="hover">
-                        <template #trigger>提升%：{{sourceStatCalcResult.diffR}}%</template>
-                        <span>提升所有等效屬性後增加的防後爆B攻相對於未提升時的%數</span>
-                      </n-popover>
-                    </n-gi>
-                    <n-gi :span="gis">
-                      <n-popover trigger="hover">
-                        <template #trigger>表攻：{{Math.floor(sourceStatCalcResult.dDamage)}}</template>
-                        <span>提升所有等效屬性後增加的表攻</span>
-                      </n-popover>
-                    </n-gi>
+                    <n-gi :span="gis">{{props.atR}}：{{sourceStatCalcResult.atR}}%</n-gi>
                     <template  v-for="s in showStats">
                       <n-gi :span="gis">{{props[s]}}：{{sourceStatCalcResult[s]}}</n-gi>
                       <n-gi :span="gis">{{props[s+'R']}}：{{sourceStatCalcResult[s+'R']}}%</n-gi>
                       <n-gi :span="gis">{{props[s+'D']}}：{{sourceStatCalcResult[s+'D']}}</n-gi>
                     </template>
-                    <n-gi :span="gis">{{props.atR}}：{{sourceStatCalcResult.atR}}%</n-gi>
-                    <n-gi :span="gis">{{props.pmad}}：{{sourceStatCalcResult.pmad}}</n-gi>
+                    <br>
                     <n-gi :span="gis">{{props.pmadR}}：{{sourceStatCalcResult.pmadR}}%</n-gi>
+                    <n-gi :span="gis">{{props.pmad}}：{{sourceStatCalcResult.pmad}}</n-gi>
                     <n-gi :span="gis">{{props.pmadD}}：{{sourceStatCalcResult.pmadD}}</n-gi>
+                    </br>
+                    <div>
                     <n-gi :span="gis">{{props.damR}}/{{props.bdR}}：{{sourceStatCalcResult.damR}}%</n-gi>
                     <n-gi :span="gis">{{props.imdR}}：{{sourceStatCalcResult.imdR}}%</n-gi>
-                    <n-gi :span="gis">{{props.pmdR}}：{{sourceStatCalcResult.pmdR}}%</n-gi>
                     <n-gi :span="gis">{{props.cdR}}：{{sourceStatCalcResult.cdR}}%</n-gi>
+                    <n-gi :span="gis">{{props.pmdR}}：{{sourceStatCalcResult.pmdR}}%</n-gi>
+                    </div>
+                    
+                    
+                    
+                    
+                    
                   </n-grid>
                 </n-space>
               </n-collapse-item>
