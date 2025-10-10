@@ -1319,6 +1319,9 @@ const statImdR = computed(()=>{
         </n-tab-pane>
         <n-tab-pane name="result" tab="计算结果">
           <n-form>
+            <n-alert :show-icon="false">
+              关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度
+            </n-alert>
             <n-collapse v-model:expanded-names="resultPanelCollapseExpanded">
               <n-collapse-item title="机体" name="1">
                 <n-grid item-responsive responsive="screen" x-gap="12">
@@ -1464,7 +1467,7 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        伤害系数：{{numberFormat(currentStatCalcResult.testval)}}
+                        伤害系数：{{numberFormat(currentStatCalcResult.testval*level_value)}}
                       </template>
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
@@ -1472,7 +1475,7 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        伤害系数：{{numberFormat(level_value.value)}}
+                        伤害系数：{{level_value}}
                       </template>
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
