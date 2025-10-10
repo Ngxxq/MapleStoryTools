@@ -129,7 +129,8 @@ function calcSourceData(data){
   result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
 
   // 计算技能伤害
-  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage.value/100)*(1+data.pmdR/100)*level_value.value*arc_value.value*aut_value.value*(skill_value.value/100+skill_fd.value/100)
+  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage.value/100)*(1+data.pmdR/100)
+                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100)
   //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
   // 计算最终技能伤害
@@ -1393,16 +1394,20 @@ const statImdR = computed(()=>{
                     <n-select
                       v-model:value="arc_value"
                       :options="[
-                        { label: '110%~129%', value: 1.1 },
-                        { label: '100%~109%', value: 1 }
+                        { label: '≥1.1', value: 1.1 },
+                        { label: '无', value: 1 }
                       ]"
                     />
                   </n-form-item-gi>
-                  <n-checkbox
-                    v-model:checked="aut_value_checked"
-                    label="真实之力压制"
-                    @update:checked="value => aut_value = value ? 1.25 : 1"
-                  />
+                  <n-form-item-gi label-placement="left" label="真实力量压制" :span="gis">
+                    <n-select
+                      v-model:value="aut_value"
+                      :options="[
+                        { label: '≥50', value: 1.25 },
+                        { label: '无', value: 1 }
+                      ]"
+                    />
+                  </n-form-item-gi>
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="技能设定" name="3">
