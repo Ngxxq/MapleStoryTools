@@ -1463,6 +1463,14 @@ const statImdR = computed(()=>{
                       <span>伤害系数 * 技能倍率 = 平均伤害</span>
                     </n-popover>
                   </n-gi>
+                  <n-gi :span="gis">
+                    <n-popover trigger="hover">
+                      <template #trigger>
+                        伤害系数：{{numberFormat(level_value)}}
+                      </template>
+                      <span>伤害系数 * 技能倍率 = 平均伤害</span>
+                    </n-popover>
+                  </n-gi>
                   <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
