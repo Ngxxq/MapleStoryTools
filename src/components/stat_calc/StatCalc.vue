@@ -129,7 +129,8 @@ function calcSourceData(data){
   result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
 
   // 计算技能伤害
-  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)*level_value*arc_value*aut_value*(skill_value/100+skill_fd/100)
+  //result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)*level_value*arc_value*aut_value*(skill_value/100+skill_fd/100)
+  result.skillDamage = result.damage * (1+data.damR/100+data.bdR/100+skill_damage/100)*(1+data.pmdR/100)
 
   // 计算最终技能伤害
   result.showDamage = Math.max((result.skillDamage*result.remainDef),0) * (1.35+data.cdR /100)
