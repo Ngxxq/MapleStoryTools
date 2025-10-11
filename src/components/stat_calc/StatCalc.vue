@@ -447,7 +447,7 @@ function saveStore(){
   message.success("档案已储存");
 }
 //計算素質
-const def = ref(300)
+const def = ref(380)
 const skill_value = ref(100)
 const skill_fd = ref(0)
 const skill_pd = ref(0)
@@ -456,8 +456,8 @@ const skill_ied = ref(0)
 const arc_value = ref(1)
 const aut_value = ref(1)
 const level_value = ref(1.2)
-const ier = ref(0)
-const weapon_mastery = (1)
+const ier = ref(5)
+const weapon_mastery = ref(86)
 
 const currentStatCalcResult = computed(()=>{
   saveStore()
