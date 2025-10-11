@@ -139,7 +139,7 @@ function calcSourceData(data){
 
   result.maxSingleLineDamage = result.skillDamage * (1.5 + data.cdR/100)
   result.minSingleLineDamage = result.skillDamage * (1.2 + data.cdR/100) * weapon_mastery.value/100
-  result.maxSingleLineDamageTest = result.wm * (result.total_prim_stat * 4 + total_second_stat) * (data.pmad * (1+data.pmadR/100) + data.pmadD) / 100* // 武器系数 * 属性评分 * 攻击评分 / 100 
+  result.maxSingleLineDamageTest = result.wm * (result.total_prim_stat * 4 + result.total_second_stat) * (data.pmad * (1+data.pmadR/100) + data.pmadD) / 100* // 武器系数 * 属性评分 * 攻击评分 / 100 
                         (skill_value.value/100+skill_pd.value/100) * // 技能系数 
                         (1 + data.damR / 100 + data.bdR / 100 + skill_damage.value / 100) * (1 + data.pmdR / 100) * (1+skill_fd.value/100) * // 总伤、B伤、技能%伤害、终伤、技能终伤
                         level_value.value * Math.max(arc_value.value, aut_value.value) * (1 + ier.value / 100) / 2 * // 等级、星力、属性抗性、
