@@ -129,8 +129,8 @@ function calcSourceData(data){
   result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100)) * (1+ier.value/100)/2
 
   // 计算技能伤害
-  result.skillDamage = result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
-                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_fd.value/100) * (1+ier.value/100)/2
+  result.skillDamage = (1+skill_fd.value/100) * result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
+                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_pd.value/100) * (1+ier.value/100)/2
 
   // 计算最终技能伤害
   result.showDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.35+data.cdR /100)
@@ -442,6 +442,7 @@ function saveStore(){
 const def = ref(300)
 const skill_value = ref(100)
 const skill_fd = ref(0)
+const skill_pd = ref(0)
 const skill_damage = ref(0)
 const arc_value = ref(1)
 const aut_value = ref(1)
@@ -1431,15 +1432,22 @@ const statImdR = computed(()=>{
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
-                  <n-form-item-gi label="技能伤害%增加" :span="gis">
-                    <n-input-number min="0" v-model:value="skill_damage">
+                  <n-form-item-gi label="技能最终伤害%增加" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_fd">
                       <template #suffix>
                         %
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
                   <n-form-item-gi label="技能伤害p%增加" :span="gis">
-                    <n-input-number min="0" v-model:value="skill_fd">
+                    <n-input-number min="0" v-model:value="skill_pd">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
+                  <n-form-item-gi label="技能伤害%增加" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_damage">
                       <template #suffix>
                         %
                       </template>
@@ -1481,15 +1489,6 @@ const statImdR = computed(()=>{
                       <span>技能单段最大伤害</span>
                     </n-popover>
                   </n-gi>
-                  <!-- <n-gi :span="gis">
-                    <div>调试信息:</div>
-                    <div>等级压制: {{ level_value }}</div>
-                    <div>神秘力量: {{ arc_value }}</div>
-                    <div>真实之力: {{ aut_value }}</div>
-                    <div>技能系数: {{ skill_value }}</div>
-                    <div>技能系数: {{ skill_damage }}</div>
-                    <div>技能系数: {{ skill_fd }}</div>
-                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="属性换算" name="5">
