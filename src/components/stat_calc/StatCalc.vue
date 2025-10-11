@@ -70,6 +70,8 @@ function calcSourceData(data){
     skillDamage:0,
     showDamage:0,
     maxDamage:0,
+    maxSingleLineDamage:0,
+    minSingleLineDamage:0,
   }
   if (!jobs.hasOwnProperty(data.job)){
     return result
@@ -108,29 +110,35 @@ function calcSourceData(data){
 
   //計算真功
   result.wm = jobs[data.job].wm
-  result.damage = (result.wm * result.st * (data.pmad * (1+data.pmadR/100) + data.pmadD) / 100)
+  result.damage = (result.wm * result.st * Math.floor((data.pmad * (1+data.pmadR/100) + data.pmadD)) / 100)
 
-  //表功
+  //属性攻击力
   result.dDamage = (result.damage * (1+data.damR/100) * (1+data.pmdR/100))
 
-  //練功
+  //一般伤害
   result.nDamage = (result.damage * (1+data.damR/100+data.ndR/100) * (1+data.pmdR/100))
 
-  //b功
+  //BOSS怪物
   result.bDamage = (result.damage * (1+data.damR/100+data.bdR/100) * (1+data.pmdR/100))
 
   //防禦後有效傷害部分
   result.remainingDef = 1 - ( 1 - result.imdr/100) * def.value/100
 
   //計算防後B功
-  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0) * (1+ier.value/100)/2
+  result.defBDamage = Math.max((result.bDamage * result.remainingDef),0)
 
   //計算防後暴B功
-  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100)) * (1+ier.value/100)/2
+  result.defBossCriticalDamage = (result.defBDamage * ( 1.35 + data.cdR / 100))
 
   // 计算技能伤害
-  result.skillDamage = (1+skill_fd.value/100) * result.damage * (1 + data.damR/100 + data.bdR/100 + skill_damage.value/100) * (1+data.pmdR/100)
-                                     * level_value.value * Math.max(arc_value.value, aut_value.value) * (skill_value.value/100+skill_pd.value/100) * (1+ier.value/100)/2
+  result.skillDamage =  result.damage * (skill_value.value/100+skill_pd.value/100) * // 武器系数 * 属性评分 * 攻击评分 / 100 * 技能系数 
+                        (1 + data.damR / 100 + data.bdR / 100 + skill_damage.value / 100) * (1 + data.pmdR / 100) * (1+skill_fd.value/100) * // 总伤、B伤、技能%伤害、终伤、技能终伤
+                        level_value.value * Math.max(arc_value.value, aut_value.value) * (1 + ier.value / 100) / 2 * // 等级、星力、属性抗性、
+                        (1 - ( mdr/100 * (1-skill_ied.value/100)) * def.value/100) //防御
+
+  result.maxSingleLineDamage = result.skillDamage * (1.5 + data.cdR/100)
+  result.minSingleLineDamage = result.skillDamage * (1.2 + data.cdR/100) * weapon_mastery.value
+
 
   // 计算最终技能伤害
   result.showDamage = Math.max((result.skillDamage*result.remainingDef),0) * (1.35+data.cdR /100)
@@ -410,7 +418,7 @@ const numberFormat = computed(()=>{
 
     if (typeof n!=="number") return n
     let counter = 0;
-    let units = ['兆 ','億 ','萬 ']
+    let units = ['兆 ','亿 ','万 ']
     let result = []
     const num = Math.floor(n).toString().split('');
     for (let i = num.length - 1; i >= 0; i--) {
@@ -444,10 +452,12 @@ const skill_value = ref(100)
 const skill_fd = ref(0)
 const skill_pd = ref(0)
 const skill_damage = ref(0)
+const skill_ied = ref(0)
 const arc_value = ref(1)
 const aut_value = ref(1)
 const level_value = ref(1.2)
 const ier = ref(0)
+const weapon_mastery = (1)
 
 const currentStatCalcResult = computed(()=>{
   saveStore()
@@ -482,10 +492,10 @@ function calcSourceAddonData(addons){
   result['diff'] = diff
   if (afterResult.defBDamage===0) return result
   //添加最大技能伤害
-  const max_diff = afterResult.maxDamage - beforeResult.maxDamage
+  const max_diff = afterResult.maxSingleLineDamage - beforeResult.maxSingleLineDamage
   result['max_diff'] = max_diff
 
-  if (afterResult.maxDamage===0) return result
+  if (afterResult.maxSingleLineDamage===0) return result
   
 
   //計算提升%
@@ -1336,7 +1346,7 @@ const statImdR = computed(()=>{
                       <span>真攻 × (100% + 傷害%) × (100% + 總傷%)</span>
                     </n-popover>
                   </n-gi>
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         真攻：{{numberFormat(currentStatCalcResult.damage)}}
@@ -1359,7 +1369,7 @@ const statImdR = computed(()=>{
                       </template>
                       <span>真攻 × (100% + 傷害% + 一般傷害%) × (100% + 總傷%)</span>
                     </n-popover>
-                  </n-gi>
+                  </n-gi> -->
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
@@ -1370,6 +1380,13 @@ const statImdR = computed(()=>{
                   </n-gi>
                   <n-form-item-gi label-placement="left" label="无视属性抗性%" :span="gis">
                     <n-input-number min="0" max="5" v-model:value="ier">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
+                  <n-form-item-gi label-placement="left" label="武器熟练度%" :span="gis">
+                    <n-input-number min="0" max="100" v-model:value="weapon_mastery">
                       <template #suffix>
                         %
                       </template>
@@ -1453,6 +1470,13 @@ const statImdR = computed(()=>{
                       </template>
                     </n-input-number>
                   </n-form-item-gi>
+                  <n-form-item-gi label="技能无视防御%增加" :span="gis">
+                    <n-input-number min="0" v-model:value="skill_ied">
+                      <template #suffix>
+                        %
+                      </template>
+                    </n-input-number>
+                  </n-form-item-gi>
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="输出计算" name="4">
@@ -1476,7 +1500,7 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        技能单段伤害：{{numberFormat(currentStatCalcResult.showDamage)}}
+                        技能单段最小伤害：{{numberFormat(currentStatCalcResult.minSingleLineDamage)}}
                       </template>
                       <span>技能单段平均伤害</span>
                     </n-popover>
@@ -1484,7 +1508,7 @@ const statImdR = computed(()=>{
                   <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
-                        技能单段最大伤害：{{numberFormat(currentStatCalcResult.maxDamage)}}
+                        技能单段最大伤害：{{numberFormat(currentStatCalcResult.maxSingleLineDamage)}}
                       </template>
                       <span>技能单段最大伤害</span>
                     </n-popover>
@@ -1531,7 +1555,7 @@ const statImdR = computed(()=>{
                     </template>
                     <n-gi :span="gis">
                       <n-popover trigger="hover">
-                        <template #trigger>面板：{{Math.floor(sourceStatCalcResult.dDamage)}}</template>
+                        <template #trigger>面板：{{numberFormat(Math.floor(sourceStatCalcResult.dDamage))}}</template>
                         <span>提升所有等效屬性後增加的表攻</span>
                       </n-popover>
                     </n-gi>
@@ -1541,15 +1565,15 @@ const statImdR = computed(()=>{
                         <span>提升所有等效屬性後增加的防後爆B攻相對於未提升時的%數</span>
                       </n-popover>
                     </n-gi>
-                    <n-gi :span="gis">
+                    <!-- <n-gi :span="gis">
                       <n-popover trigger="hover">
                         <template #trigger>伤害系数：{{Math.floor(sourceStatCalcResult.diff)}}</template>
                         <span>提升所有等效屬性後增加的防後爆B攻</span>
                       </n-popover>
-                    </n-gi>
+                    </n-gi> -->
                     <n-gi :span="gis">
                       <n-popover trigger="hover">
-                        <template #trigger>技能单段最大伤害：{{Math.floor(sourceStatCalcResult.max_diff)}}</template>
+                        <template #trigger>技能单段最大伤害：{{numberFormat(Math.floor(sourceStatCalcResult.max_diff))}}</template>
                         <span>提升所有等效屬性後增加的单段技能伤害</span>
                       </n-popover>
                     </n-gi>
