@@ -289,7 +289,7 @@ class Buffs{
       //new Buff(`公會大祝福`,new BuffStat("pmad",30)),
       new Buff(`灵药`,new BuffStat("pmadR",10),new BuffStat("pmad",50),new BuffStat("bdR",10),new BuffStat("cdR",16)),
       new Buff(`老虎`,new BuffStat("bdR",100)),
-      new Buff(`天气一套 (绿色青蛙会顶掉老虎，使用前请与队友沟通； 跑旗可以给30攻的家族的祝福吗)`,new BuffStat("pmad",260)),
+      new Buff(`天气一套 (绿色青蛙会顶掉老虎，使用前请与队友沟通)`,new BuffStat("pmad",260)),
       new Buff(`联盟椅子`,new BuffStat("pmad",80)),
       new Buff(`名匠`,new BuffStat("cdR",5))
       // new Buff(`MVP`,new BuffStat("pmad",30)),
@@ -1343,7 +1343,7 @@ const statImdR = computed(()=>{
             <n-collapse v-model:expanded-names="resultPanelCollapseExpanded">
               <n-collapse-item title="机体" name="1">
                 <n-alert :show-icon="false">
-                  关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度更适合黎明的BUFF计算器，涵盖黎明所有常用BUFF，其余BUFF请自行添加<br>
+                  关于误差：最终伤害在面板中显示值为四舍五入后的值，使用此值计算会导致±0.5%内的误差，可以通过添加有效位数来提高精确度<br>
                   计算实际伤害时需填写面板上的无视属性抗性<br></br>
                 </n-alert>
                 <n-grid item-responsive responsive="screen" x-gap="12">
@@ -1450,6 +1450,11 @@ const statImdR = computed(()=>{
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="技能设定" name="3">
+                <n-alert :show-icon="false">
+                  将与技能文本对应的值填如相应位置
+                  技能系数：鼠标放在技能上显示的系数，若有多次强化以最后一个为准<br>
+                  技能最终伤害%增加：文本显示增加最终伤害%数值的，一般由五转核心、六转技能等级提供<br></br>
+                </n-alert>
                 <n-grid item-responsive responsive="screen" x-gap="12">
                   <n-form-item-gi label="技能系数%" :span="gis">
                     <n-input-number min="0" v-model:value="skill_value">
@@ -1537,14 +1542,14 @@ const statImdR = computed(()=>{
                       <span>技能单段最大伤害</span>
                     </n-popover>
                   </n-gi> -->
-                  <n-gi :span="gis">
+                  <!-- <n-gi :span="gis">
                     <n-popover trigger="hover">
                       <template #trigger>
                         技能单段最大伤害(爆伤+5)：{{numberFormat(currentStatCalcResult.maxSingleLineDamage1)}}
                       </template>
                       <span>技能单段最大伤害</span>
                     </n-popover>
-                  </n-gi>
+                  </n-gi> -->
                 </n-grid>
               </n-collapse-item>
               <n-collapse-item title="属性换算" name="5">
