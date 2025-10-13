@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 
 import {Calculation} from "@vicons/carbon";
 
@@ -558,4 +558,4 @@ const calcResult = computed(()=>{
 
 <style scoped>
 
-</style>
+</style> -->
