@@ -1555,10 +1555,8 @@ const statImdR = computed(()=>{
               <n-collapse-item title="属性换算" name="5">
                 <n-space vertical>
                   <n-alert :show-icon="false">
-                    填寫等效源的數值和類型後，可以看到對應數值的等效源等於多少其他屬性。<br>
-                    無視防禦視為增加一條無視而不是直接在當前無視的基礎上增加數值，比如當前無視80%，增加40%無視後，最終無視是88%而不是120%；相應的，等效結果中的無視也是等效源的數值相當於額外增加一條%數的無視的效果；無視的實際效果可能會受不顯示在ui中的無視（如部分5、6轉技能）影響而導致實際提升幅度沒有計算器計算的大，如需計算此部分無視的影響可以在屬性設定ui中增加此部分無視。<br>
-                    由於傷害計算部分有大量需要“向下取整”的地方會捨去部分小數，所以有部分數據的換算會有一定誤差，可以調整等效源的數值以多次分析。<br>
-                    對於惡復來說，由於計算實際hp時會減半計算，所以如果提升的hp來源為裝備等，需要將等效數值乘以2計算（%數正常計算即可）。
+                    填写等效源数值和类型后，可以看到对应数值与其他属性的换算<br>
+                    属性攻击力一栏准确则属性换算准确<br>
                   </n-alert>
                   <n-grid item-responsive responsive="screen" x-gap="12">
                     <n-form-item-gi span="24">
@@ -1693,7 +1691,9 @@ const statImdR = computed(()=>{
                       </template>
                     </n-alert>
                   </template>
-
+                  <n-alert :show-icon="false">
+                    三颗核心计算量较大，点击开始计算后请耐心等待<br>
+                  </n-alert>
                   <n-button :loading="calcHexaIng" @click="calcHexaState">
                     點我開始計算
                   </n-button>
