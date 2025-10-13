@@ -1515,7 +1515,7 @@ const statImdR = computed(()=>{
                       <template #trigger>
                         伤害系数：{{numberFormat(currentStatCalcResult.defBossCriticalDamage)}}
                       </template>
-                      <span>税后伤害系数：{{currentStatCalcResult.defBDamage}}%，爆伤系数：{{(1.35 + data.cdR / 100).toFixed(2)}}%<br />税后伤害系数 × 爆伤系数 </span>
+                      <span>税后伤害系数 × 暴击伤害系数 </span>
                     </n-popover>
                   </n-gi>
                   <!-- <n-gi :span="gis">
@@ -1531,7 +1531,7 @@ const statImdR = computed(()=>{
                       <template #trigger>
                         技能单段最大伤害：{{numberFormat(currentStatCalcResult.maxSingleLineDamage)}}
                       </template>
-                      <span>伤害系数：{{currentStatCalcResult.defBossCriticalDamage}}，等级压制：{{level_value.value}}<br />星力压制：{{Math.max(arc_value.value, aut_value.value)}}，属性抗性系数：{{(1 + ier.value / 100) / 2}}，技能系数：{{(skill_value.value/100+skill_pd.value/100)*(1+skill_fd/100)}} <br />伤害系数 × 技能系数 × 等级压制 × 星力压制 × 属性抗性系数</span>
+                      <span>伤害系数 × 技能系数 × 等级压制 × 星力压制 × 属性抗性系数</span>
                     </n-popover>
                   </n-gi>
                   <!-- <n-gi :span="gis">
