@@ -110,6 +110,8 @@ function calcSourceData(data){
       result.st = Math.floor(result.total_prim_stat)*4 + Math.floor(result.total_second_stat)
   }
 
+  //Math.floor( base_prim_stat * ( 1 + prim_stat_rate ) + fix_prim_stat ) * 4 + Math.floor( base_sec_stat * (1 + sec_stat_rate ) + fix_sec_stat) * Math.floor((base_att * (1+att_rate) + fix_att)/100) *(damage + bd) *fd *remdef*(1.35+cd)
+
   //計算真功
   result.wm = jobs[data.job].wm
   result.damage = (result.wm * result.st * Math.floor((data.pmad * (1+data.pmadR/100) + data.pmadD)) / 100)
@@ -476,7 +478,7 @@ function calcSourceAddonData(addons){
   const result = dupeObj(calcStats)
   result.diff = 0
   result.dDamage = 0
-  result.max_diff = 0
+  // result.max_diff = 0
   if (!jobs.hasOwnProperty(currentStat.value.data.job)){
     return result
   }
@@ -501,8 +503,8 @@ function calcSourceAddonData(addons){
   result['diff'] = diff
   if (afterResult.defBDamage===0) return result
   //添加最大技能伤害
-  const max_diff = afterResult.maxSingleLineDamage - beforeResult.maxSingleLineDamage
-  result['max_diff'] = max_diff
+  // const max_diff = afterResult.maxSingleLineDamage - beforeResult.maxSingleLineDamage
+  // result['max_diff'] = max_diff
 
   if (afterResult.maxSingleLineDamage===0) return result
   
@@ -512,6 +514,7 @@ function calcSourceAddonData(addons){
 
   //計算爆傷比例
   result.cdR = formatFloat((diff / beforeResult.defBDamage * 100))
+  //result.cdR = formatFloat(afterResult.defBossCriticalDamage/beforeResult.defBDamage-(1.35+currentStat.value.data.cdR)/100)
 
   //計算提升的防後B功(等於b功 * 減去無視防禦後實際能打的傷害部分)
   const diffDefBDamage = diff / ( 1.35 + buffData.cdR / 100)
@@ -531,6 +534,7 @@ function calcSourceAddonData(addons){
   const diffRDamage = diffDamage / beforeResult.wm * 100
   //最終攻擊
   const pmadD = diffRDamage / beforeResult.st
+  //const pmadD = afterResult.defBossCriticalDamage/(currentStat.value.data.st*(currentStat.value.data.damR+currentStat.value.data.bdR)*cure)
   result.pmadD = formatFloat(pmadD)
   result.pmad = formatFloat((pmadD / (1+buffData.pmadR/100)))
   result.pmadR = formatFloat((pmadD / buffData.pmad * 100))
@@ -866,7 +870,7 @@ function calcHyperState() {
     hyperStateLogs.value +=`你現在的方案已經是最佳方案了。\n`
   }else {
     //下降
-    hyperStateLogs.value +=`你現在的方案比計算機計算的方案更好，這說明計算機的算法有待改進，如果可以的話，是否可以前往github或巴哈將您的數據反饋給作者以便改進？\n`
+    hyperStateLogs.value +=`你現在的方案比計算機計算的方案更好，這說明計算機的算法有待改進，请反馈给作者\n`
   }
 
   calcHyperIng.value = false
@@ -1555,8 +1559,8 @@ const statImdR = computed(()=>{
               <n-collapse-item title="属性换算" name="5">
                 <n-space vertical>
                   <n-alert :show-icon="false">
-                    填写等效源数值和类型后，可以看到对应数值与其他属性的换算<br>
-                    属性攻击力一栏准确则属性换算准确<br>
+                    填写等效源数值和类型后，可以看到对应数值与其他属性的换算，属性攻击力一栏准确则属性换算准确<br>
+                    主属性/副属性和攻击力在计算过程中的floor操作会导致与本身比较时有舍入误差，不影响换算结果<br>
                   </n-alert>
                   <n-grid item-responsive responsive="screen" x-gap="12">
                     <n-form-item-gi span="24">
@@ -1590,7 +1594,7 @@ const statImdR = computed(()=>{
                     </template>
                     <n-gi :span="gis">
                       <n-popover trigger="hover">
-                        <template #trigger>面板：{{numberFormat(Math.floor(sourceStatCalcResult.dDamage))}}</template>
+                        <template #trigger>面板提升：{{numberFormat(Math.floor(sourceStatCalcResult.dDamage))}}</template>
                         <span>提升所有等效屬性後增加的表攻</span>
                       </n-popover>
                     </n-gi>
@@ -1606,25 +1610,27 @@ const statImdR = computed(()=>{
                         <span>提升所有等效屬性後增加的防後爆B攻</span>
                       </n-popover>
                     </n-gi> -->
-                    <n-gi :span="gis">
+                    <!-- <n-gi :span="gis">
                       <n-popover trigger="hover">
                         <template #trigger>技能单段最大伤害：{{numberFormat(Math.floor(sourceStatCalcResult.max_diff))}}</template>
                         <span>提升所有等效屬性後增加的单段技能伤害</span>
                       </n-popover>
-                    </n-gi>
-                    <n-gi :span="gis">{{props.atR}}：{{sourceStatCalcResult.atR}}%</n-gi>
-                    <template  v-for="s in showStats">
-                      <n-gi :span="gis">{{props[s]}}：{{sourceStatCalcResult[s]}}</n-gi>
-                      <n-gi :span="gis">{{props[s+'R']}}：{{sourceStatCalcResult[s+'R']}}%</n-gi>
-                      <n-gi :span="gis">{{props[s+'D']}}：{{sourceStatCalcResult[s+'D']}}</n-gi>
-                    </template>
+                    </n-gi> -->
                     <n-gi :span="gis">{{props.pmadR}}：{{sourceStatCalcResult.pmadR}}%</n-gi>
-                    <n-gi :span="gis">{{props.pmad}}：{{sourceStatCalcResult.pmad}}</n-gi>
-                    <n-gi :span="gis">{{props.pmadD}}：{{sourceStatCalcResult.pmadD}}</n-gi>
                     <n-gi :span="gis">{{props.damR}}/{{props.bdR}}：{{sourceStatCalcResult.damR}}%</n-gi>
-                    <n-gi :span="gis">{{props.imdR}}：{{sourceStatCalcResult.imdR}}%</n-gi>
+                    <template  v-for="s in showStats">
+                      <n-gi :span="gis">{{props[s+'R']}}：{{sourceStatCalcResult[s+'R']}}%</n-gi>
+                    </template>
+                    <n-gi :span="gis">{{props.atR}}：{{sourceStatCalcResult.atR}}%</n-gi>
                     <n-gi :span="gis">{{props.cdR}}：{{sourceStatCalcResult.cdR}}%</n-gi>
                     <n-gi :span="gis">{{props.pmdR}}：{{sourceStatCalcResult.pmdR}}%</n-gi>
+                    <template  v-for="s in showStats">
+                      <n-gi :span="gis">{{props[s]}}：{{sourceStatCalcResult[s]}}</n-gi>
+                      <n-gi :span="gis">{{props[s+'D']}}：{{sourceStatCalcResult[s+'D']}}</n-gi>
+                    </template>
+                    <n-gi :span="gis">{{props.pmad}}：{{sourceStatCalcResult.pmad}}</n-gi>
+                    <n-gi :span="gis">{{props.pmadD}}：{{sourceStatCalcResult.pmadD}}</n-gi>
+                    <n-gi :span="gis">{{props.imdR}}：{{sourceStatCalcResult.imdR}}%</n-gi>
                   </n-grid>
                 </n-space>
               </n-collapse-item>
